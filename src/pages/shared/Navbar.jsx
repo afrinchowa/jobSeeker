@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Navbar = () => {
   return (
     <div className="navbar bg-base-100 shadow-md px-4">
@@ -36,7 +38,7 @@ const Navbar = () => {
             <li><a className="hover:text-primary">Contact</a></li>
           </ul>
         </div>
-        <a className="btn btn-ghost text-2xl font-bold text-primary">daisyUI</a>
+        <a className="btn btn-ghost text-2xl font-bold text-primary">Job Seeker</a>
       </div>
 
       {/* Center - Desktop menu */}
@@ -58,6 +60,7 @@ const Navbar = () => {
 
       {/* End - Action button */}
       <div className="navbar-end">
+        <Link to="/register">Register</Link>
         <a className="btn btn-primary text-white">Sign In</a>
       </div>
     </div>
