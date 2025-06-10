@@ -61,6 +61,7 @@ const Navbar = () => {
       {/* End - Action button */}
       <div className="navbar-end">
         <Link to="/register">Register</Link>
+        <Link to="/login">Signin</Link>
         <a className="btn btn-primary text-white">Sign In</a>
       </div>
     </div>
