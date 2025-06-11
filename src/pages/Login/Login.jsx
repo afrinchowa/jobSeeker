@@ -1,5 +1,5 @@
 import Lottie from "lottie-react";
-import LoginAnimation from '../../assets/lottie/register.json'; // Adjust the path as necessary
+import LoginAnimation from '../../assets/lottie/login.json'; // Adjust the path as necessary
 
 const Login = () => {
    const handleLogin = (event) => {
