@@ -1,7 +1,12 @@
 import Lottie from "lottie-react";
 import registerAnimation from '../../assets/lottie/register.json';
+import { useContext } from "react";
+import AuthContext from "../../context/AuthContext/AuthContext";
 
 const Register = () => {
+
+const {  createUser } = useContext(AuthContext);
+
   const handleRegister = (event) => {
     event.preventDefault();
     const form = event.target;
@@ -23,6 +28,15 @@ const Register = () => {
       alert("Password must be at least 8 characters long, with one uppercase letter, one lowercase letter, one number, and one special character.");
       return;
     }
+
+    createUser(email,password)
+    .then(result =>{
+      console.log(result.user)
+    })
+    .catch(error => {
+      console.error("Error creating user:", error.message);
+      alert("Failed to create user. Please try again.");
+    })
 
     // ✅ All Good
     console.log("Registering with:", { email, password });
