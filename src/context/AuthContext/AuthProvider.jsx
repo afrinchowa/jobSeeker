@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react'
+import React, { use, useState } from 'react'
 import AuthContext from './AuthContext'
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 const AuthProvider = ({children}) => {
 const [user, setUser] = useState(null);
 const [loading, setLoading] = useState(true);
@@ -11,12 +11,20 @@ const createUser = (auth,email,password) =>{
   setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password); 
 }
+
+useEffect(() =>{ 
+const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      console.log('state changed', currentUser);
+      setLoading(false);
+    
+    });
+    return () => unsubscribe();
+},[])
     const authInfo = {
-        user,
-        setUser,
+        user,      
         loading,
-        setLoading,
-        createUser
+        createUser,
 
        
     }

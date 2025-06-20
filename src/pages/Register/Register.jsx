@@ -1,6 +1,6 @@
 import Lottie from "lottie-react";
 import registerAnimation from '../../assets/lottie/register.json';
-import { useContext } from "react";
+import React, { useContext } from "react";
 import AuthContext from "../../context/AuthContext/AuthContext";
 
 const Register = () => {
