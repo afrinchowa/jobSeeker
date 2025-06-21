@@ -1,7 +1,9 @@
 import Lottie from "lottie-react";
 import LoginAnimation from '../../assets/lottie/login.json'; // Adjust the path as necessary
+import AuthContext from "../../context/AuthContext/AuthContext";
 
 const Login = () => {
+  const {signInUser} = useContext(AuthContext);
    const handleLogin = (event) => {
       event.preventDefault();
       const form = event.target;
@@ -10,8 +12,13 @@ const Login = () => {
   
       // Here you would typically send the data to your server or authentication service
       console.log("Logining with:", { email, password });
-  
-      // Reset the form after submission
+  signInUser(email, password)
+    .then(result =>{
+      console.log('sign in',result.user)
+    })
+    .catch(error=>{
+      console.log(error)
+    })  // Reset the form after submission
       form.reset();
     }
     return (
