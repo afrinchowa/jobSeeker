@@ -3,7 +3,18 @@ import { Link } from "react-router-dom";
 import AuthContext from "../../context/AuthContext/AuthContext";
 
 const Navbar = () => {
-  const {user} =useContext(AuthContext);
+  const {user ,signOutUser} =useContext(AuthContext);
+  const handleSignOut = () => {
+    signOutUser()
+      .then(() => {
+        console.log("User signed out successfully");
+      })
+      .catch((error) => {
+        console.error("Error signing out:", error);
+      });
+  }
+  
+  
   return (
     <div className="navbar bg-base-100 shadow-md px-4">
       {/* Start - Mobile dropdown and logo */}
@@ -64,7 +75,7 @@ const Navbar = () => {
       {/* End - Action button */}
       <div className="navbar-end">
         {
-          user? <> <button className="btn">Log out</button>
+          user? <> <button onClick={handleSignOut} className="btn">Log out</button>
           </>:<> <Link className="btn btn-primary text-white" to="/register">Register</Link>
           <Link className="btn btn-primary text-white" to="/login">Signin</Link></>
         }
