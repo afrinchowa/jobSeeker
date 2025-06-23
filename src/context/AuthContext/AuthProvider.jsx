@@ -8,10 +8,11 @@ import {
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
   signOut, 
-  onAuthStateChanged 
+  onAuthStateChanged, 
+  GoogleAuthProvider
 } from "firebase/auth";
  // Adjust the path as needed
-
+const googleProvider = new GoogleAuthProvider();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -27,7 +28,10 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
-
+const signInWithGoogle = () => {
+  setLoading(true);
+ return signInWithPopup(auth, googleProvider);
+   }
   // Sign out current user
   const signOutUser = () => {
     setLoading(true);
@@ -50,7 +54,8 @@ const AuthProvider = ({ children }) => {
     loading,
     createUser,
     signInUser,
-    signOutUser
+    signOutUser,
+    signInWithGoogle  ,
   };
 
   return (
