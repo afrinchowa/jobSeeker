@@ -14,7 +14,12 @@ const Navbar = () => {
       });
   }
   
-  
+  const links = (
+    <>
+      <li><Link to="/">Home</Link></li>
+      <li><Link to="/jobs">Jobs</Link></li>
+    </>
+  );
   return (
     <div className="navbar bg-base-100 shadow-md px-4">
       {/* Start - Mobile dropdown and logo */}
@@ -41,15 +46,7 @@ const Navbar = () => {
           <ul
             tabIndex={0}
             className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-lg bg-base-100 rounded-box w-52">
-            <li><a className="hover:text-primary">Home</a></li>
-            <li>
-              <a className="hover:text-primary">Services</a>
-              <ul className="p-2 bg-base-200 rounded-box">
-                <li><a>Design</a></li>
-                <li><a>Development</a></li>
-              </ul>
-            </li>
-            <li><a className="hover:text-primary">Contact</a></li>
+           {links}
           </ul>
         </div>
         <a className="btn btn-ghost text-2xl font-bold text-primary">Job Seeker</a>
@@ -58,16 +55,7 @@ const Navbar = () => {
       {/* Center - Desktop menu */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
-          <li><a className="hover:text-primary">Home</a></li>
-          <li tabIndex={0}>
-            <details>
-              <summary className="hover:text-primary">Services</summary>
-              <ul className="p-2 bg-base-200 rounded-box">
-                <li><a>Design</a></li>
-                <li><a>Development</a></li>
-              </ul>
-            </details>
-          </li>
+          {links}
           <li><a className="hover:text-primary">Contact</a></li>
         </ul>
       </div>
@@ -77,7 +65,7 @@ const Navbar = () => {
         {
           user? <> <button onClick={handleSignOut} className="btn">Log out</button>
           </>:<> <Link className="btn btn-primary text-white" to="/register">Register</Link>
-          <Link className="btn btn-primary text-white" to="/login">Signin</Link></>
+          <Link className="btn btn-primary text-white"          to="/login">Signin</Link></>
         }
        
       
