@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import HotJobsCard from './HotJobsCard';
 
 const HotJobs = () => {
      const [jobs,setJobs]=useState([]);
@@ -9,7 +10,10 @@ const HotJobs = () => {
       },[])
   return (
     <div>
-     
+     <div>
+        {
+            jobs.map(job => <HotJobsCard key={job._id} job={job} className="card w-96 bg-base-100 shadow-xl m-5"></HotJobsCard> )}
+     </div>
     </div>
   )
 }
