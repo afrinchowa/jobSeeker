@@ -1,12 +1,17 @@
-import React, { useContext } from "react";
+/* eslint-disable no-unused-vars */
+import React, { use, useContext } from "react";
 import Lottie from "lottie-react";
 import LoginAnimation from '../../assets/lottie/login.json';
 import AuthContext from "../../context/AuthContext/AuthContext";
 import SocialLogin from "../shared/SocialLogin";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { signInUser } = useContext(AuthContext);
-
+const location=useLocation();
+const navigate=useNavigate();
+console.log(location);
+const from=location.state?.from?.pathname || '/';
   const handleLogin = (event) => {
     event.preventDefault();
     const form = event.target;
@@ -18,7 +23,9 @@ const Login = () => {
     signInUser(email, password)
       .then(result => {
         console.log('Sign in successful:', result.user);
-        form.reset(); // ✅ Only reset if login is successful
+        form.reset();
+        navigate(from, { replace: true }); // Redirect to the previous page or home
+        // ✅ Only reset if login is successful
       })
       .catch(error => {
         console.error("Login error:", error.message);
