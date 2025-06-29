@@ -5,6 +5,7 @@ import { CiLocationOn } from "react-icons/ci";
 const JobDetails = () => {
   const job = useLoaderData();
   const {
+    _id,
     title,
     company,
     location,
@@ -69,10 +70,12 @@ const JobDetails = () => {
       </div>
 
       {/* Apply Button */}
-      <div className="text-right">
-        <button className="btn btn-primary px-6 py-2 text-white font-medium rounded-md shadow hover:bg-blue-600 transition">
+  <div className="text-right">
+  <Link to={`/jobApply/${_id}`}> <button className="btn btn-primary px-6 py-2 text-white font-medium rounded-md shadow hover:bg-blue-600 transition">
           Apply Now
-        </button>
+        </button>  </Link>
+    
+       
       </div>
     </div>
   );
