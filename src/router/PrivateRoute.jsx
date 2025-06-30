@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { AuthContext } from '../context/AuthProvider'
+import AuthContext from '../context/AuthContext/AuthContext';
 import { useLocation } from 'react-router-dom';
 const PrivateRoute = ({children}) => {
     const  {user,loading}=useContext(AuthContext);
