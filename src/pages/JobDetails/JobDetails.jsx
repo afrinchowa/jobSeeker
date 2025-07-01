@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
 
 const JobDetails = () => {
