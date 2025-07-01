@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import Swal from 'sweetalert2'
 const JobApply = () => {
   const { id } = useParams();
   const {user}=useAuth();
@@ -29,7 +30,18 @@ const JobApply = () => {
   })
   .then(res => res.json())
   .then(data => {
-  console.log(data)
+  if(data.insertedId){
+    Swal.fire({
+  title: "Good job!",
+  text: "Your work has been saved",
+  icon: "success",
+  timer: 1500,
+  showConfirmButton: false
+});
+  form.reset();
+  }
+});
+  }
   })
 
 }
