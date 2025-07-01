@@ -20,7 +20,19 @@ const JobApply = () => {
       githuburl,
       resumeurl
     }
-  };
+    fetch("http://localhost:500/job-applications", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(jobApplication),
+  })
+  .then(res => res.json())
+  .then(data => {
+  console.log(data)
+  })
+
+}
   return (
     <div className="card bg-base-100 w-full  shadow-2xl">
       <h1 className="text-5xl font-bold text center">
