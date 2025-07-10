@@ -1,6 +1,16 @@
 import React from "react";
 
 const AddJob = () => {
+  const handleAddJob =e =>{
+    e.preventDefault();
+    const formData =new FormData(e.target);
+      console.log(formData.entries());
+      const initialData = Object.formEntries(formData.entries())
+      console.log(initialData)
+    const {min ,max,currency,...newJob}=initialData;
+    console.log(newJob)
+    newJob.salaryRange={min,max,currency}
+  }
   return (
     <div className="p-4 md:p-10 bg-base-100 shadow-md rounded-lg max-w-3xl mx-auto">
       <h2 className="text-2xl font-bold mb-6 text-center">Post a New Job</h2>
