@@ -1,16 +1,40 @@
 import React from "react";
-
+import Swal from "sweetalert2";
 const AddJob = () => {
+  const {user}=useAuth();
   const handleAddJob =e =>{
     e.preventDefault();
     const formData =new FormData(e.target);
-      console.log(formData.entries());
+    
       const initialData = Object.formEntries(formData.entries())
-      console.log(initialData)
+
     const {min ,max,currency,...newJob}=initialData;
-    console.log(newJob)
+   
     newJob.salaryRange={min,max,currency}
+    newJob.requirements =  newJob.requirements.split('\n')
+    newJob.responsibilities =  newJob.respon{
+fetch('http://localhost:500/jobs',{
+  method:'POST',
+  headers:{
+    'content-type':'application/json'
+  },
+body:JSON.stringify(newJob),
+})
+.then(res =res.json())
+.then(data => {
+if (data.insertedId) {
+          Swal.fire({
+            title: "Job has added",
+            text: "Good luck 🍀 We're rooting for you!",
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+      navigate("/myApplications");
+        }
+})
   }
+}
   return (
     <div className="p-4 md:p-10 bg-base-100 shadow-md rounded-lg max-w-3xl mx-auto">
       <h2 className="text-2xl font-bold mb-6 text-center">Post a New Job</h2>
@@ -63,8 +87,8 @@ const AddJob = () => {
             <label className="label">
               <span className="label-text font-semibold">Job Type</span>
             </label>
-            <select name="jobType" className="select select-bordered" required>
-              <option disabled selected>Choose type</option>
+            <select defaulValue="Pick a Job Type" name="jobType" className="select select-bordered" required>
+              <option disabled >Choose type</option>
               <option>Full Time</option>
               <option>Part Time</option>
               <option>Contract</option>
@@ -130,8 +154,8 @@ const AddJob = () => {
             <label className="label">
               <span className="label-text font-semibold">Currency</span>
             </label>
-            <select name="currency" className="select select-bordered" required>
-              <option disabled selected>Select</option>
+            <select defaulValue='Currency' name="currency" className="select select-bordered" required>
+              <option disabled >Select</option>
               <option>BDT</option>
               <option>USD</option>
               <option>EURO</option>
@@ -198,7 +222,7 @@ const AddJob = () => {
             </label>
             <input
               type="email"
-              name="hr_email"
+              name="hr_email" defaultValue={user.email}
               placeholder="e.g. hr@company.com"
               className="input input-bordered"
               required
