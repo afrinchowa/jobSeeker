@@ -30,7 +30,7 @@ if (data.insertedId) {
             timer: 2000,
             showConfirmButton: false,
           });
-      navigate("/myApplications");
+      navigate("/myPostedJobs");
         }
 })
   }
