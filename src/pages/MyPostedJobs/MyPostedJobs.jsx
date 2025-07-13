@@ -21,6 +21,7 @@ fetch(`http://localhost:5000/jobs?email=${user.email}`)
         <th>Job title:</th>
         <th>Deadline</th>
         <th>Application Count</th>
+        <th> View Application</th>
       </tr>
     </thead>
     <tbody>
@@ -30,6 +31,11 @@ fetch(`http://localhost:5000/jobs?email=${user.email}`)
         <td>{job.title}</td>
         <td>{job.applicationdeadline}</td>
         <td>{job.applicationCount}</td>
+        <td>
+          <Link to={`/viewApplication/${job._id}`}>
+          <button className='btn btn-link'>View Applications</button>
+          </Link>
+        </td>
       </tr>)
    }
    
