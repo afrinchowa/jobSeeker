@@ -1,82 +1,82 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from 'react'
-import useAuth from '../../hooks/useAuth'
+import React, { useEffect, useState } from 'react';
+import useAuth from '../../hooks/useAuth';
 
 const MyApplications = () => {
-    const {user} = useAuth()
-    const [jobs, setJobs] = React.useState([]);
-    useEffect(() => {
+  const { user } = useAuth();
+  const [jobs, setJobs] = useState([]);
 
-        fetch(`http://localhost:5000/job-applications?email=${user.email}`)
-            .then(res => res.json())
-            .then(data => {
-               setJobs(data);
-            })
-    }, [user.email])
+  useEffect(() => {
+    if (user?.email) {
+      fetch(`http://localhost:5000/job-applications?email=${user.email}`)
+        .then((res) => res.json())
+        .then((data) => setJobs(data))
+        .catch((error) => console.error('Error fetching job applications:', error));
+    }
+  }, [user?.email]);
+
   return (
-    <div>
-      <h2 className="text-3xl">
-        My Applications:{jobs.length}
-        <div className="overflow-x-auto">
-  <table className="table">
-    {/* head */}
-    <thead>
-      <tr>
-        <th>
-          <label>
-            <input type="checkbox" className="checkbox" />
-          </label>
-        </th>
-        <th>Name</th>
-        <th>Job</th>
-        <th>Favorite Color</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {/* row 1 */}
-  {
-    jobs.map(job =>    <tr>
-        <th>
-          <label>
-            <input type="checkbox" className="checkbox" />
-          </label>
-        </th>
-        <td>
-          <div className="flex items-center gap-3">
-            <div className="avatar">
-              <div className="mask mask-squircle h-12 w-12">
-                <img
-                  src={job.company} />
-              </div>
-            </div>
-            <div>
-              <div className="font-bold">{job.title}</div>
-              <div className="text-sm opacity-50">United States</div>
-            </div>
-          </div>
-        </td>
-        <td>
-         {job.location}
-          <br />
-          <span className="badge badge-ghost badge-sm">{job.location}</span>
-        </td>
-        <td>Purple</td>
-        <th>
-          <button className="btn btn-ghost btn-xs">details</button>
-        </th>
-      </tr>
-
-    )
-  }
-
-    </tbody>
-   
-  </table>
-</div>
+    <div className="p-6">
+      <h2 className="text-3xl font-semibold mb-6">
+        My Applications <span className="text-primary">({jobs.length})</span>
       </h2>
-    </div>
-  )
-}
 
-export default MyApplications
+      <div className="overflow-x-auto rounded shadow bg-white">
+        <table className="table w-full">
+          <thead className="bg-base-200 text-base-content">
+            <tr>
+              <th>#</th>
+              <th>Job Info</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {jobs.length === 0 ? (
+              <tr>
+                <td colSpan="5" className="text-center py-6 text-gray-500">
+                  No applications found.
+                </td>
+              </tr>
+            ) : (
+              jobs.map((job, index) => (
+                <tr key={job._id || index}>
+                  <td>{index + 1}</td>
+                  <td>
+                    <div className="flex items-center gap-4">
+                      <div className="avatar">
+                        <div className="mask mask-squircle w-12 h-12">
+                          <img
+                            src={job.company || 'https://via.placeholder.com/48'}
+                            alt="Company Logo"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <div className="font-bold">{job.title}</div>
+                        <div className="text-sm text-gray-500">{job.companyName || 'Unknown Company'}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span className="badge badge-outline">{job.location || 'N/A'}</span>
+                  </td>
+                  <td>
+                    <span className="badge badge-success">Applied</span>
+                  </td>
+                  <td>
+                    <button className="btn btn-sm btn-outline">Details</button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+export default MyApplications;
