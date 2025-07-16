@@ -1,262 +1,113 @@
 import React from "react";
 import Swal from "sweetalert2";
-const AddJob = () => {
-  const {user}=useAuth();
-  const handleAddJob =e =>{
-    e.preventDefault();
-    const formData =new FormData(e.target);
-    
-      const initialData = Object.formEntries(formData.entries())
+import { useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
-    const {min ,max,currency,...newJob}=initialData;
-   
-    newJob.salaryRange={min,max,currency}
-    newJob.requirements =  newJob.requirements.split('\n')
-    newJob.responsibilities =  newJob.respon{
-fetch('http://localhost:500/jobs',{
-  method:'POST',
-  headers:{
-    'content-type':'application/json'
-  },
-body:JSON.stringify(newJob),
-})
-.then(res =res.json())
-.then(data => {
-if (data.insertedId) {
-          Swal.fire({
-            title: "Job has added",
-            text: "Good luck 🍀 We're rooting for you!",
-            icon: "success",
-            timer: 2000,
-            showConfirmButton: false,
-          });
-      navigate("/myPostedJobs");
-        }
-})
-  }
-}
+const AddJob = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleAddJob = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const formValues = Object.fromEntries(formData.entries());
+
+    const { min, max, currency, requirements, responsibilities, ...rest } = formValues;
+
+    const newJob = {
+      ...rest,
+      salaryRange: {
+        min: parseInt(min),
+        max: parseInt(max),
+        currency,
+      },
+      requirements: requirements.split("\n").filter(Boolean),
+      responsibilities: responsibilities.split("\n").filter(Boolean),
+      hr_email: user?.email || rest.hr_email,
+    };
+
+    try {
+      const res = await fetch("http://localhost:5000/jobs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newJob),
+      });
+
+      const data = await res.json();
+
+      if (data.insertedId) {
+        Swal.fire({
+          title: "Job has been added!",
+          text: "Good luck 🍀 We're rooting for you!",
+          icon: "success",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+        navigate("/myPostedJobs");
+      }
+    } catch (error) {
+      console.error("Error submitting job:", error);
+      Swal.fire({
+        title: "Submission Failed",
+        text: "Please try again later.",
+        icon: "error",
+      });
+    }
+  };
+
   return (
     <div className="p-4 md:p-10 bg-base-100 shadow-md rounded-lg max-w-3xl mx-auto">
       <h2 className="text-2xl font-bold mb-6 text-center">Post a New Job</h2>
-      <form className="space-y-6">
+      <form onSubmit={handleAddJob} className="space-y-6">
         {/* Job Title */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text font-semibold">Job Title</span>
-          </label>
-          <input
-            type="text"
-            name="title"
-            placeholder="e.g. Software Engineer"
-            className="input input-bordered"
-            required
-          />
-        </div>
+        <InputField label="Job Title" name="title" placeholder="e.g. Software Engineer" />
 
         {/* Company Name */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text font-semibold">Company Name</span>
-          </label>
-          <input
-            type="text"
-            name="company"
-            placeholder="e.g. TB Company"
-            className="input input-bordered"
-            required
-          />
-        </div>
+        <InputField label="Company Name" name="company" placeholder="e.g. TB Company" />
 
         {/* Location */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text font-semibold">Location</span>
-          </label>
-          <input
-            type="text"
-            name="location"
-            placeholder="e.g. Banani, Dhaka"
-            className="input input-bordered"
-            required
-          />
-        </div>
+        <InputField label="Location" name="location" placeholder="e.g. Banani, Dhaka" />
 
         {/* Job Type & Category */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">Job Type</span>
-            </label>
-            <select defaulValue="Pick a Job Type" name="jobType" className="select select-bordered" required>
-              <option disabled >Choose type</option>
-              <option>Full Time</option>
-              <option>Part Time</option>
-              <option>Contract</option>
-              <option>Internship</option>
-              <option>Temporary</option>
-            </select>
-          </div>
-
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">Category</span>
-            </label>
-            <input
-              type="text"
-              name="category"
-              placeholder="e.g. Marketing, Design, Tech"
-              className="input input-bordered"
-              required
-            />
-          </div>
+          <SelectField label="Job Type" name="jobType" options={["Full Time", "Part Time", "Contract", "Internship", "Temporary"]} />
+          <InputField label="Category" name="category" placeholder="e.g. Marketing, Design, Tech" />
         </div>
 
         {/* Application Deadline */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text font-semibold">Application Deadline</span>
-          </label>
-          <input
-            type="date"
-            name="applicationDeadline"
-            className="input input-bordered"
-            required
-          />
-        </div>
+        <InputField label="Application Deadline" name="applicationDeadline" type="date" />
 
         {/* Salary Range */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">Min Salary</span>
-            </label>
-            <input
-              type="number"
-              name="min"
-              placeholder="e.g. 30000"
-              className="input input-bordered"
-              required
-            />
-          </div>
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">Max Salary</span>
-            </label>
-            <input
-              type="number"
-              name="max"
-              placeholder="e.g. 50000"
-              className="input input-bordered"
-              required
-            />
-          </div>
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">Currency</span>
-            </label>
-            <select defaulValue='Currency' name="currency" className="select select-bordered" required>
-              <option disabled >Select</option>
-              <option>BDT</option>
-              <option>USD</option>
-              <option>EURO</option>
-            </select>
-          </div>
+          <InputField label="Min Salary" name="min" type="number" placeholder="e.g. 30000" />
+          <InputField label="Max Salary" name="max" type="number" placeholder="e.g. 50000" />
+          <SelectField label="Currency" name="currency" options={["BDT", "USD", "EURO"]} />
         </div>
 
-        {/* Job Description */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text font-semibold">Description</span>
-          </label>
-          <textarea
-            name="description"
-            placeholder="Write job description here..."
-            className="textarea textarea-bordered"
-            required
-          ></textarea>
-        </div>
+        {/* Description */}
+        <TextAreaField label="Description" name="description" placeholder="Write job description here..." />
 
         {/* Requirements */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text font-semibold">Requirements</span>
-          </label>
-          <textarea
-            name="requirements"
-            placeholder="Each requirement in a new line"
-            className="textarea textarea-bordered"
-            required
-          ></textarea>
-        </div>
+        <TextAreaField label="Requirements" name="requirements" placeholder="Each requirement in a new line" />
 
         {/* Responsibilities */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text font-semibold">Responsibilities</span>
-          </label>
-          <textarea
-            name="responsibilities"
-            placeholder="Each responsibility in a new line"
-            className="textarea textarea-bordered"
-            required
-          ></textarea>
-        </div>
+        <TextAreaField label="Responsibilities" name="responsibilities" placeholder="Each responsibility in a new line" />
 
         {/* HR Name & Email */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">HR Name</span>
-            </label>
-            <input
-              type="text"
-              name="hr_name"
-              placeholder="e.g. Farhan Rahman"
-              className="input input-bordered"
-              required
-            />
-          </div>
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">HR Email</span>
-            </label>
-            <input
-              type="email"
-              name="hr_email" defaultValue={user.email}
-              placeholder="e.g. hr@company.com"
-              className="input input-bordered"
-              required
-            />
-          </div>
+          <InputField label="HR Name" name="hr_name" placeholder="e.g. Farhan Rahman" />
+          <InputField label="HR Email" name="hr_email" type="email" defaultValue={user?.email} />
         </div>
 
-        {/* Company Logo URL */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text font-semibold">Company Logo URL</span>
-          </label>
-          <input
-            type="url"
-            name="company_logo"
-            placeholder="https://your-logo-link.com"
-            className="input input-bordered"
-          />
-        </div>
+        {/* Logo */}
+        <InputField label="Company Logo URL" name="company_logo" type="url" placeholder="https://your-logo-link.com" />
 
         {/* Status */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text font-semibold">Status</span>
-          </label>
-          <select name="status" className="select select-bordered" required>
-            <option disabled selected>Select job status</option>
-            <option>active</option>
-            <option>inactive</option>
-            <option>closed</option>
-          </select>
-        </div>
+        <SelectField label="Status" name="status" options={["active", "inactive", "closed"]} />
 
-        {/* Submit Button */}
+        {/* Submit */}
         <div className="form-control mt-6">
           <button type="submit" className="btn btn-primary w-full">
             Post Job
